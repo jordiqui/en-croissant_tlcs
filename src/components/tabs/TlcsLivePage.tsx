@@ -1,4 +1,9 @@
-import { commands, events, type TlcsConnectionStatus, type TlcsGameState } from "@/bindings";
+import {
+  events,
+  type TlcsConnectionStatus,
+  type TlcsGameState,
+  commands,
+} from "@/bindings";
 import { Chessground } from "@/chessground/Chessground";
 import {
   Badge,
@@ -17,8 +22,8 @@ import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import {
   IconArrowBackUp,
-  IconPlugConnected,
   IconPlayerPlay,
+  IconPlugConnected,
   IconRefresh,
   IconShieldX,
 } from "@tabler/icons-react";
@@ -71,10 +76,12 @@ export function TlcsLivePage() {
   const [form, setForm] = useState<FormState>(DEFAULT_FORM);
   const [game, setGame] = useState<TlcsGameState | null>(null);
   const [lastRaw, setLastRaw] = useState<string | null>(null);
-  const [connectionStatus, setConnectionStatus] = useState<TlcsConnectionStatus>();
+  const [connectionStatus, setConnectionStatus] =
+    useState<TlcsConnectionStatus>();
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
   const [boardFen, setBoardFen] = useState<string>("start");
-  const [connecting, { open: startConnecting, close: stopConnecting }] = useDisclosure(false);
+  const [connecting, { open: startConnecting, close: stopConnecting }] =
+    useDisclosure(false);
 
   useEffect(() => {
     const unlistenConnection = events.tlcsConnection.listen((event) => {
@@ -135,7 +142,9 @@ export function TlcsLivePage() {
     }
   };
 
-  const sendAction = async (action: "AcceptOffer" | "OfferDraw" | "Resign" | "DeclineDraw") => {
+  const sendAction = async (
+    action: "AcceptOffer" | "OfferDraw" | "Resign" | "DeclineDraw",
+  ) => {
     const res = await commands.sendTlcsAction(action);
     if (res.status === "error") {
       notifications.show({
@@ -167,32 +176,43 @@ export function TlcsLivePage() {
             <TextInput
               label="WireGuard host"
               value={form.host}
-              onChange={(event) => setForm((f) => ({ ...f, host: event.currentTarget.value }))}
+              onChange={(event) =>
+                setForm((f) => ({ ...f, host: event.currentTarget.value }))
+              }
             />
             <NumberInput
               label="Port"
               value={form.port}
-              onChange={(value) => setForm((f) => ({ ...f, port: Number(value) }))}
+              onChange={(value) =>
+                setForm((f) => ({ ...f, port: Number(value) }))
+              }
               min={1}
               max={65535}
             />
             <TextInput
               label="Username"
               value={form.username}
-              onChange={(event) => setForm((f) => ({ ...f, username: event.currentTarget.value }))}
+              onChange={(event) =>
+                setForm((f) => ({ ...f, username: event.currentTarget.value }))
+              }
             />
             <TextInput
               label="Password"
               type="password"
               value={form.password}
-              onChange={(event) => setForm((f) => ({ ...f, password: event.currentTarget.value }))}
+              onChange={(event) =>
+                setForm((f) => ({ ...f, password: event.currentTarget.value }))
+              }
             />
             <NumberInput
               label="Reconnect interval (ms)"
               description="Automatically retry when the TLCS socket drops"
               value={form.reconnectIntervalMs}
               onChange={(value) =>
-                setForm((f) => ({ ...f, reconnectIntervalMs: Number(value ?? 0) }))
+                setForm((f) => ({
+                  ...f,
+                  reconnectIntervalMs: Number(value ?? 0),
+                }))
               }
               min={500}
             />
@@ -200,7 +220,10 @@ export function TlcsLivePage() {
               label="Auto reconnect"
               checked={form.autoReconnect}
               onChange={(event) =>
-                setForm((f) => ({ ...f, autoReconnect: event.currentTarget.checked }))
+                setForm((f) => ({
+                  ...f,
+                  autoReconnect: event.currentTarget.checked,
+                }))
               }
             />
             <Group justify="space-between" mt="md">
@@ -230,7 +253,9 @@ export function TlcsLivePage() {
               </Button>
             </Group>
             {statusMessage ? (
-              <Badge color={statusColor(connectionStatus)}>{statusMessage}</Badge>
+              <Badge color={statusColor(connectionStatus)}>
+                {statusMessage}
+              </Badge>
             ) : null}
           </Stack>
         </Card>
@@ -289,7 +314,9 @@ export function TlcsLivePage() {
                     <Text size="sm" c="dimmed">
                       Status
                     </Text>
-                    <Text fw={600}>{game?.status ?? "Waiting for updates"}</Text>
+                    <Text fw={600}>
+                      {game?.status ?? "Waiting for updates"}
+                    </Text>
                   </Stack>
                 </Card>
                 <Card withBorder padding="sm" radius="md">

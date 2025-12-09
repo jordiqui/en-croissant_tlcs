@@ -12,11 +12,11 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as SettingsImport } from './routes/settings'
+import { Route as LiveImport } from './routes/live'
 import { Route as FilesImport } from './routes/files'
 import { Route as EnginesImport } from './routes/engines'
 import { Route as AccountsImport } from './routes/accounts'
 import { Route as IndexImport } from './routes/index'
-import { Route as LiveImport } from './routes/live'
 import { Route as DatabasesIndexImport } from './routes/databases/index'
 import { Route as DatabasesDatabaseIdImport } from './routes/databases/$databaseId'
 
@@ -24,6 +24,11 @@ import { Route as DatabasesDatabaseIdImport } from './routes/databases/$database
 
 const SettingsRoute = SettingsImport.update({
   path: '/settings',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const LiveRoute = LiveImport.update({
+  path: '/live',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -44,11 +49,6 @@ const AccountsRoute = AccountsImport.update({
 
 const IndexRoute = IndexImport.update({
   path: '/',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const LiveRoute = LiveImport.update({
-  path: '/live',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -74,16 +74,16 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AccountsImport
       parentRoute: typeof rootRoute
     }
-    '/live': {
-      preLoaderRoute: typeof LiveImport
-      parentRoute: typeof rootRoute
-    }
     '/engines': {
       preLoaderRoute: typeof EnginesImport
       parentRoute: typeof rootRoute
     }
     '/files': {
       preLoaderRoute: typeof FilesImport
+      parentRoute: typeof rootRoute
+    }
+    '/live': {
+      preLoaderRoute: typeof LiveImport
       parentRoute: typeof rootRoute
     }
     '/settings': {
@@ -106,9 +106,9 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren([
   IndexRoute,
   AccountsRoute,
-  LiveRoute,
   EnginesRoute,
   FilesRoute,
+  LiveRoute,
   SettingsRoute,
   DatabasesDatabaseIdRoute,
   DatabasesIndexRoute,
