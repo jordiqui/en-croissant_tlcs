@@ -175,7 +175,7 @@ fn main() {
             start_tlcs_stream,
             stop_tlcs_stream,
             tlcs_status,
-            tlcs_analysis_options
+            tlcs_analysis_options,
             connect_tlcs,
             disconnect_tlcs,
             send_tlcs_action,
