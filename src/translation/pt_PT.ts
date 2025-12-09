@@ -135,6 +135,7 @@ export const pt_PT = {
     "Home.Card.Puzzle.Title": "Puzzles",
     "Home.Card.Puzzle.Desc": "Treinar habilidades de xadrez",
     "Home.Card.Puzzle.Button": "Treinar",
+    "Home.Credits": "Credits: Jorge Ruiz Centelles and Codex OpenIA",
 
     "Board.Tabs.Practice": "Prática",
     "Board.Tabs.Analysis": "Análise",

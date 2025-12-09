@@ -135,6 +135,7 @@ export const tr_TR = {
     "Home.Card.Puzzle.Title": "Bulmacalar",
     "Home.Card.Puzzle.Desc": "Satranç becelerinizi geliştirin",
     "Home.Card.Puzzle.Button": "Çalış",
+    "Home.Credits": "Credits: Jorge Ruiz Centelles and Codex OpenIA",
 
     "Board.Tabs.Practice": "Egzersis",
     "Board.Tabs.Analysis": "Analiz",

@@ -135,6 +135,7 @@ export const en_US = {
     "Home.Card.Puzzle.Title": "Puzzles",
     "Home.Card.Puzzle.Desc": "Train your chess skills",
     "Home.Card.Puzzle.Button": "Train",
+    "Home.Credits": "Credits: Jorge Ruiz Centelles and Codex OpenIA",
 
     "Board.Action.TogglePawnStructureView": "Toggle Pawn Structure View",
     "Board.Action.TakeSnapshot": "Take Snapshot",

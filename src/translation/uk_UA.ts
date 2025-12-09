@@ -135,6 +135,7 @@ export const uk_UA = {
     "Home.Card.Puzzle.Title": "Головоломки",
     "Home.Card.Puzzle.Desc": "Тренуйте шахові навички",
     "Home.Card.Puzzle.Button": "Тренуватися",
+    "Home.Credits": "Credits: Jorge Ruiz Centelles and Codex OpenIA",
 
     "Board.Tabs.Practice": "Практика",
     "Board.Tabs.Analysis": "Аналіз",

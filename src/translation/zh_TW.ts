@@ -135,6 +135,7 @@ export const zh_TW = {
     "Home.Card.Puzzle.Title": "戰術訓練",
     "Home.Card.Puzzle.Desc": "訓練您的西洋棋技巧",
     "Home.Card.Puzzle.Button": "訓練",
+    "Home.Credits": "Credits: Jorge Ruiz Centelles and Codex OpenIA",
 
     "Board.Tabs.Practice": "練習",
     "Board.Tabs.Analysis": "分析",

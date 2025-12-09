@@ -135,6 +135,7 @@ export const de_DE = {
     "Home.Card.Puzzle.Title": "Puzzles",
     "Home.Card.Puzzle.Desc": "Deine Schachfähigkeiten trainieren",
     "Home.Card.Puzzle.Button": "Trainieren",
+    "Home.Credits": "Credits: Jorge Ruiz Centelles and Codex OpenIA",
 
     "Board.Tabs.Practice": "Training",
     "Board.Tabs.Analysis": "Analyse",
