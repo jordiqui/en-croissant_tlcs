@@ -13,6 +13,7 @@ mod oauth;
 mod opening;
 mod pgn;
 mod puzzle;
+mod tlcs_client;
 
 use std::path::PathBuf;
 use std::sync::{Arc, Mutex};
@@ -52,6 +53,11 @@ use crate::{
     },
     fs::{download_file, file_exists, get_file_metadata},
     opening::{get_opening_from_fen, get_opening_from_name, search_opening_name},
+    tlcs_client::{
+        connect as tlcs_connect, disconnect as tlcs_disconnect, keep_alive as tlcs_keep_alive,
+        send_move as tlcs_send_move, subscribe_game as tlcs_subscribe_game, TlcsErrorEvent,
+        TlcsMessageEvent, TlcsStatusEvent,
+    },
 };
 use tokio::sync::{RwLock, Semaphore};
 
@@ -83,6 +89,8 @@ pub struct AppState {
 
     engine_processes: DashMap<(String, String), Arc<tokio::sync::Mutex<EngineProcess>>>,
     auth: AuthState,
+    #[derivative(Default(value = "Arc::new(RwLock::new(tlcs_client::TlcsManager::default()))"))]
+    tlcs_client: Arc<RwLock<tlcs_client::TlcsManager>>,
 }
 
 const REQUIRED_DIRS: &[(BaseDirectory, &str)] = &[
@@ -153,13 +161,21 @@ fn main() {
             get_games,
             search_position,
             get_players,
-            get_puzzle_db_info
+            get_puzzle_db_info,
+            tlcs_connect,
+            tlcs_subscribe_game,
+            tlcs_send_move,
+            tlcs_keep_alive,
+            tlcs_disconnect
         ))
         .events(tauri_specta::collect_events!(
             BestMovesPayload,
             DatabaseProgress,
             DownloadProgress,
-            ReportProgress
+            ReportProgress,
+            TlcsStatusEvent,
+            TlcsMessageEvent,
+            TlcsErrorEvent
         ));
 
     #[cfg(debug_assertions)]
