@@ -117,6 +117,7 @@ export const es_ES = {
     "SideBar.User": "Usuario",
     "SideBar.Files": "Archivos",
     "SideBar.Databases": "Bases de datos",
+    "SideBar.Live": "Live",
     "SideBar.Engines": "Motores",
     "SideBar.Settings": "Configuración",
 

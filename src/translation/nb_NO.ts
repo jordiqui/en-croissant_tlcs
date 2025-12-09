@@ -117,6 +117,7 @@ export const nb_NO = {
     "SideBar.User": "Bruker",
     "SideBar.Files": "Filer",
     "SideBar.Databases": "Databaser",
+    "SideBar.Live": "Live",
     "SideBar.Engines": "Computerene",
     "SideBar.Settings": "Innstillinger",
 

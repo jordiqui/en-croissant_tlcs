@@ -5,6 +5,7 @@ import {
   IconCpu,
   IconDatabase,
   IconFiles,
+  IconBroadcast,
   IconSettings,
   IconUser,
 } from "@tabler/icons-react";
@@ -45,6 +46,7 @@ const linksdata = [
     label: "Databases",
     url: "/databases",
   },
+  { icon: IconBroadcast, label: "Live", url: "/live" },
   { icon: IconCpu, label: "Engines", url: "/engines" },
 ];
 

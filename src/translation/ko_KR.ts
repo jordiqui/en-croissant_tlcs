@@ -117,6 +117,7 @@ export const ko_KR = {
     "SideBar.User": "사용자",
     "SideBar.Files": "파일",
     "SideBar.Databases": "데이터베이스",
+    "SideBar.Live": "Live",
     "SideBar.Engines": "엔진",
     "SideBar.Settings": "설정",
 

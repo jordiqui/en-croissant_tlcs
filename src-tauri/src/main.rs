@@ -6,6 +6,7 @@
 mod chess;
 mod db;
 mod error;
+mod tlcs;
 
 mod fs;
 mod lexer;
@@ -13,7 +14,11 @@ mod oauth;
 mod opening;
 mod pgn;
 mod puzzle;
+ codex/implement-tlcs-stream-to-pgn-writer
 mod tlcs;
+=======
+mod tlcs_client;
+ master
 
 use std::path::PathBuf;
 use std::sync::{Arc, Mutex};
@@ -56,6 +61,15 @@ use crate::{
     },
     fs::{download_file, file_exists, get_file_metadata},
     opening::{get_opening_from_fen, get_opening_from_name, search_opening_name},
+ codex/add-connection-dialog-and-live-game-state
+    tlcs::{connect_tlcs, disconnect_tlcs, reconnect_tlcs, send_tlcs_action, SharedTlcs, TlcsManager},
+=======
+    tlcs_client::{
+        connect as tlcs_connect, disconnect as tlcs_disconnect, keep_alive as tlcs_keep_alive,
+        send_move as tlcs_send_move, subscribe_game as tlcs_subscribe_game, TlcsErrorEvent,
+        TlcsMessageEvent, TlcsStatusEvent,
+    },
+ master
 };
 use tokio::sync::{RwLock, Semaphore};
 
@@ -87,8 +101,18 @@ pub struct AppState {
 
     engine_processes: DashMap<(String, String), Arc<tokio::sync::Mutex<EngineProcess>>>,
     auth: AuthState,
+codex/implement-tlcs-stream-to-pgn-writer
     #[derivative(Default(value = "Arc::new(RwLock::new(None))"))]
     tlcs_handle: Arc<RwLock<Option<TlcsHandle>>>,
+=======
+codex/add-connection-dialog-and-live-game-state
+    #[derivative(Default(value = "Arc::new(TlcsManager::default())"))]
+    tlcs: SharedTlcs,
+=======
+    #[derivative(Default(value = "Arc::new(RwLock::new(tlcs_client::TlcsManager::default()))"))]
+    tlcs_client: Arc<RwLock<tlcs_client::TlcsManager>>,
+ master
+ master
 }
 
 const REQUIRED_DIRS: &[(BaseDirectory, &str)] = &[
@@ -160,16 +184,39 @@ fn main() {
             search_position,
             get_players,
             get_puzzle_db_info,
+ codex/implement-tlcs-stream-to-pgn-writer
             start_tlcs_stream,
             stop_tlcs_stream,
             tlcs_status,
             tlcs_analysis_options
+=======
+ codex/add-connection-dialog-and-live-game-state
+            connect_tlcs,
+            disconnect_tlcs,
+            send_tlcs_action,
+            reconnect_tlcs
+=======
+            tlcs_connect,
+            tlcs_subscribe_game,
+            tlcs_send_move,
+            tlcs_keep_alive,
+            tlcs_disconnect
+ master
+ master
         ))
         .events(tauri_specta::collect_events!(
             BestMovesPayload,
             DatabaseProgress,
             DownloadProgress,
-            ReportProgress
+            ReportProgress,
+codex/add-connection-dialog-and-live-game-state
+            tlcs::TlcsConnectionEvent,
+            tlcs::TlcsGameEvent
+=======
+            TlcsStatusEvent,
+            TlcsMessageEvent,
+            TlcsErrorEvent
+ master
         ));
 
     #[cfg(debug_assertions)]
