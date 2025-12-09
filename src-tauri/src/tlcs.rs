@@ -468,7 +468,7 @@ enum TlcsControl {
 }
 
 pub struct TlcsManager {
-    handle: Mutex<Option<TlcsHandle>>,
+    handle: Mutex<Option<TlcsConnectionHandle>>,
     last_options: Mutex<Option<TlcsConnectArgs>>,
 }
 
@@ -481,12 +481,12 @@ impl Default for TlcsManager {
     }
 }
 
-struct TlcsHandle {
+struct TlcsConnectionHandle {
     control: mpsc::UnboundedSender<TlcsControl>,
     join: tokio::task::JoinHandle<()>,
 }
 
-impl TlcsHandle {
+impl TlcsConnectionHandle {
     async fn shutdown(self) {
         let _ = self.control.send(TlcsControl::Disconnect);
         let _ = self.join.await;
@@ -507,7 +507,7 @@ impl TlcsManager {
         let (tx, rx) = mpsc::unbounded_channel();
         let join = tokio::spawn(run_connection(options, app, rx));
 
-        self.replace_running(Some(TlcsHandle { control: tx, join }))
+        self.replace_running(Some(TlcsConnectionHandle { control: tx, join }))
             .await;
     }
 
@@ -553,7 +553,10 @@ impl TlcsManager {
         Ok(())
     }
 
-    async fn replace_running(&self, next: Option<TlcsHandle>) -> Option<TlcsHandle> {
+    async fn replace_running(
+        &self,
+        next: Option<TlcsConnectionHandle>,
+    ) -> Option<TlcsConnectionHandle> {
         let mut handle = self.handle.lock().await;
         std::mem::replace(&mut *handle, next)
     }
