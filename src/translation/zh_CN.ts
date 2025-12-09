@@ -117,6 +117,7 @@ export const zh_CN = {
     "SideBar.User": "用户",
     "SideBar.Files": "文件",
     "SideBar.Databases": "数据库",
+    "SideBar.Live": "Live",
     "SideBar.Engines": "引擎",
     "SideBar.Settings": "设置",
 

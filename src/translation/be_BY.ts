@@ -117,6 +117,7 @@ export const be_BY = {
     "SideBar.User": "Карыстальнік",
     "SideBar.Files": "Файлы",
     "SideBar.Databases": "Базы дадзеных",
+    "SideBar.Live": "Live",
     "SideBar.Engines": "Рухавікі",
     "SideBar.Settings": "Налады",
 

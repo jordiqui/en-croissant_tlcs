@@ -53,6 +53,38 @@ async killEngines(tab: string) : Promise<Result<null, string>> {
     else return { status: "error", error: e  as any };
 }
 },
+async connectTlcs(options: TlcsConnectArgs) : Promise<Result<null, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("connect_tlcs", { options }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+async disconnectTlcs() : Promise<Result<null, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("disconnect_tlcs") };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+async sendTlcsAction(action: TlcsUserAction) : Promise<Result<null, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("send_tlcs_action", { action }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+async reconnectTlcs() : Promise<Result<null, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("reconnect_tlcs") };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
 async getEngineLogs(engine: string, tab: string) : Promise<Result<EngineLog[], string>> {
     try {
     return { status: "ok", data: await TAURI_INVOKE("get_engine_logs", { engine, tab }) };
@@ -343,12 +375,16 @@ export const events = __makeEvents__<{
 bestMovesPayload: BestMovesPayload,
 databaseProgress: DatabaseProgress,
 downloadProgress: DownloadProgress,
-reportProgress: ReportProgress
+reportProgress: ReportProgress,
+tlcsConnection: TlcsConnectionEvent,
+tlcsGame: TlcsGameEvent
 }>({
 bestMovesPayload: "best-moves-payload",
 databaseProgress: "database-progress",
 downloadProgress: "download-progress",
-reportProgress: "report-progress"
+reportProgress: "report-progress",
+tlcsConnection: "tlcs-connection",
+tlcsGame: "tlcs-game"
 })
 
 /** user-defined constants **/
@@ -363,6 +399,12 @@ export type BestMovesPayload = { bestLines: BestMoves[]; engine: string; tab: st
 export type DatabaseInfo = { title: string; description: string; player_count: number; event_count: number; game_count: number; storage_size: bigint; filename: string; indexed: boolean }
 export type DatabaseProgress = { id: string; progress: number }
 export type DownloadProgress = { progress: number; id: string; finished: boolean }
+export type TlcsConnectionEvent = { status: TlcsConnectionStatus; message: string | null }
+export type TlcsConnectionStatus = "Disconnected" | "Connecting" | "Connected" | "Error"
+export type TlcsGameEvent = { state: TlcsGameState; raw: string | null }
+export type TlcsGameState = { fen: string | null; whiteClockMs: bigint | null; blackClockMs: bigint | null; status: string | null; lastMove: string | null; canOfferDraw: boolean; canAcceptDraw: boolean; canResign: boolean }
+export type TlcsConnectArgs = { host: string; port: number; username: string; password: string; autoReconnect: boolean; reconnectIntervalMs: bigint }
+export type TlcsUserAction = "AcceptOffer" | "OfferDraw" | "Resign" | "DeclineDraw" | "RequestReconnect"
 export type EngineConfig = { name: string; options: UciOptionConfig[] }
 export type EngineLog = { type: "gui"; value: string } | { type: "engine"; value: string }
 export type EngineOption = { name: string; value: string }

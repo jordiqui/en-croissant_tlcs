@@ -117,6 +117,7 @@ export const uk_UA = {
     "SideBar.User": "Користувач",
     "SideBar.Files": "Файли",
     "SideBar.Databases": "Бази даних",
+    "SideBar.Live": "Live",
     "SideBar.Engines": "Движки",
     "SideBar.Settings": "Налаштування",
 
