@@ -85,6 +85,11 @@ ufw reload
    - Volcar el stream TLCS a PGN en disco para reproducibilidad y, en paralelo, exponerlo a los módulos existentes de análisis.
    - Registrar tráfico en un `tlcs.log` rotativo (nivel info/debug) para soporte y diagnóstico post-mortem.
 
+## Persistencia y logs
+
+- La sesión TLCS se almacena como PGN en `AppData/tlcs/tlcs-<timestamp>.pgn` (se puede especificar otra ruta si se desea). El fichero se va completando en caliente a medida que llegan jugadas para que se pueda reabrir o reinyectar en los módulos de análisis.
+- El tráfico y los eventos de ciclo de vida se vuelcan en `AppData/tlcs/tlcs.log` con rotación automática: se mantienen hasta 5 ficheros de 512KB cada uno (`tlcs.log`, `tlcs.log.1`, …). Esto evita que los diagnósticos crezcan sin límite y facilita adjuntar el histórico en soporte.
+
 ## Consideraciones adicionales
 
 - **Compatibilidad**: TLCS y WinBoard/XBoard difieren; evitar traducir a UCI a menos que sea necesario. Si se requiere compatibilidad con motores UCI, encapsular la traducción en el backend para no mezclar lógica en el frontend.

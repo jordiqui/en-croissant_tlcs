@@ -14,7 +14,11 @@ mod oauth;
 mod opening;
 mod pgn;
 mod puzzle;
+ codex/implement-tlcs-stream-to-pgn-writer
+mod tlcs;
+=======
 mod tlcs_client;
+ master
 
 use std::path::PathBuf;
 use std::sync::{Arc, Mutex};
@@ -47,6 +51,9 @@ use crate::lexer::lex_pgn;
 use crate::oauth::authenticate;
 use crate::pgn::{count_pgn_games, delete_game, read_games, write_game};
 use crate::puzzle::{get_puzzle, get_puzzle_db_info};
+use crate::tlcs::{
+    start_tlcs_stream, stop_tlcs_stream, tlcs_analysis_options, tlcs_status, TlcsHandle,
+};
 use crate::{
     chess::get_best_moves,
     db::{
@@ -94,12 +101,17 @@ pub struct AppState {
 
     engine_processes: DashMap<(String, String), Arc<tokio::sync::Mutex<EngineProcess>>>,
     auth: AuthState,
+codex/implement-tlcs-stream-to-pgn-writer
+    #[derivative(Default(value = "Arc::new(RwLock::new(None))"))]
+    tlcs_handle: Arc<RwLock<Option<TlcsHandle>>>,
+=======
 codex/add-connection-dialog-and-live-game-state
     #[derivative(Default(value = "Arc::new(TlcsManager::default())"))]
     tlcs: SharedTlcs,
 =======
     #[derivative(Default(value = "Arc::new(RwLock::new(tlcs_client::TlcsManager::default()))"))]
     tlcs_client: Arc<RwLock<tlcs_client::TlcsManager>>,
+ master
  master
 }
 
@@ -172,6 +184,12 @@ fn main() {
             search_position,
             get_players,
             get_puzzle_db_info,
+ codex/implement-tlcs-stream-to-pgn-writer
+            start_tlcs_stream,
+            stop_tlcs_stream,
+            tlcs_status,
+            tlcs_analysis_options
+=======
  codex/add-connection-dialog-and-live-game-state
             connect_tlcs,
             disconnect_tlcs,
@@ -183,6 +201,7 @@ fn main() {
             tlcs_send_move,
             tlcs_keep_alive,
             tlcs_disconnect
+ master
  master
         ))
         .events(tauri_specta::collect_events!(
