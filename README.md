@@ -48,6 +48,10 @@ pnpm build
 
 The built app can be found at `src-tauri/target/release`
 
+## TLCS integration notes (español)
+
+Consulta [docs/tlcs-integracion.md](docs/tlcs-integracion.md) para un resumen en español sobre cómo enlazar un servidor `tlc_server16a.exe` mediante WireGuard y exponerlo en la GUI con un cliente TLCS nativo.
+
 ## Donate
 
 If you wish to support the development of this GUI, you can do so [here](https://encroissant.org/support). All donations are greatly appreciated!
