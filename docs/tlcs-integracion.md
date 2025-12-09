@@ -34,6 +34,44 @@ GUI (React) ⇄ Comandos Tauri ⇄ Cliente TLCS (Rust) ⇄ Socket TCP (WireGuard
    - Crear peer del servidor con `node-tlcv` y exponer el puerto TLCS en la interfaz del túnel (ej.: `10.0.0.2:1965`).
    - Validar conectividad con `nc 10.0.0.2 1965` desde la máquina de desarrollo; revisar `debug.log` si no hay handshake.
 
+### Configuración concreta con `node-tlcv`
+
+Sugerencia de configuración mínima para enlazar el servidor TLCS en la IP privada `10.0.0.2/32` y puerto 1965:
+
+```bash
+# En el host que ejecuta node-tlcv
+wg set wg-tlcs peer <pubkey-del-dev> allowed-ips 10.0.0.3/32  # peer de la máquina de desarrollo
+wg set wg-tlcs peer <pubkey-del-servidor> allowed-ips 10.0.0.2/32
+
+# Anclar la dirección de la interfaz
+ip address replace 10.0.0.2/32 dev wg-tlcs
+
+# Reenviar el puerto TLCS hacia el proceso tlc_server16a.exe (si vive fuera del namespace del túnel)
+iptables -t nat -A PREROUTING -i wg-tlcs -p tcp --dport 1965 -j DNAT --to-destination 10.0.0.2:1965
+iptables -A FORWARD -i wg-tlcs -p tcp --dport 1965 -j ACCEPT
+```
+
+Reemplaza `wg-tlcs` con el nombre de la interfaz de WireGuard que cree `node-tlcv`. Si utilizas `ufw`, habilita explícitamente el puerto en la interfaz del túnel:
+
+```bash
+ufw allow in on wg-tlcs to 10.0.0.2 port 1965 proto tcp
+ufw reload
+```
+
+### Pruebas y diagnóstico
+
+1. Desde la máquina de desarrollo, prueba la conectividad:
+   ```bash
+   nc -vz 10.0.0.2 1965
+   ```
+   Si el handshake falla, inspecciona `debug.log` en el host que ejecuta `tlc_server16a.exe` para verificar que el servidor está escuchando y que el puerto coincide.
+2. Comprueba el estado del túnel:
+   ```bash
+   wg show wg-tlcs
+   ```
+   Verifica que los peers tienen `latest handshake` reciente y que el contador de bytes recibidos aumenta tras el `nc`.
+3. Si no hay tráfico, revisa las reglas de firewall/NAT y que `net.ipv4.ip_forward=1` esté habilitado.
+
 3. **Implementar el cliente TLCS en `src-tauri`**
    - Crear un servicio Rust (p. ej. `tlcs_client.rs`) que abra sockets TCP y maneje el framing TLCS (mensajes terminados en `\r\n`).
    - Incluir comandos Tauri para `connect`, `subscribe_game`, `send_move`, `keep_alive` y `disconnect`.
