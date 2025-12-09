@@ -1,18 +1,21 @@
- codex/implement-tlcs-stream-to-pgn-writer
 use std::collections::HashMap;
 use std::fs::{create_dir_all, File, OpenOptions};
 use std::io::{BufWriter, Write};
 use std::path::PathBuf;
 use std::sync::Arc;
+use std::time::Duration;
 
 use chrono::Utc;
+use log::error;
 use serde::{Deserialize, Serialize};
 use shakmaty::{fen::Fen, san::SanPlus, uci::UciMove, CastlingMode, Chess, EnPassantMode};
 use specta::Type;
-use tauri::path::BaseDirectory;
-use tokio::io::{AsyncBufReadExt, BufReader};
+use tauri::{path::BaseDirectory, AppHandle};
+use tauri_specta::Event;
+use tokio::io::{AsyncBufReadExt, AsyncWriteExt, BufReader};
 use tokio::net::TcpStream;
-use tokio::sync::{watch, RwLock};
+use tokio::select;
+use tokio::sync::{mpsc, watch, Mutex, RwLock};
 
 use crate::chess::AnalysisOptions;
 use crate::error::Error;
@@ -404,19 +407,7 @@ pub async fn stop_tlcs_stream(state: tauri::State<'_, AppState>) -> Result<Optio
         return Ok(Some(path.to_string_lossy().to_string()));
     }
     Ok(None)
-=======
-use std::sync::Arc;
-use std::time::Duration;
-
-use log::error;
-use serde::{Deserialize, Serialize};
-use specta::Type;
-use tauri::AppHandle;
-use tauri_specta::Event;
-use tokio::io::{AsyncBufReadExt, AsyncWriteExt, BufReader};
-use tokio::net::TcpStream;
-use tokio::select;
-use tokio::sync::{mpsc, Mutex};
+}
 
 #[derive(Clone, Debug, Serialize, Type, Event)]
 pub struct TlcsConnectionEvent {
@@ -478,7 +469,7 @@ enum TlcsControl {
 
 pub struct TlcsManager {
     handle: Mutex<Option<TlcsHandle>>,
-    last_options: Mutex<Option<TlcsConnectArgs>>, 
+    last_options: Mutex<Option<TlcsConnectArgs>>,
 }
 
 impl Default for TlcsManager {
@@ -555,7 +546,8 @@ impl TlcsManager {
     pub async fn reconnect(&self, app: AppHandle) -> Result<(), String> {
         let options = {
             let last = self.last_options.lock().await;
-            last.clone().ok_or_else(|| "No previous connection".to_string())?
+            last.clone()
+                .ok_or_else(|| "No previous connection".to_string())?
         };
         self.connect(options, app).await;
         Ok(())
@@ -594,11 +586,7 @@ async fn run_connection(
             }
             Err(err) => {
                 error!("Failed to connect to TLCS server: {err}");
-                emit_status(
-                    &app,
-                    TlcsConnectionStatus::Error,
-                    Some(err.to_string()),
-                );
+                emit_status(&app, TlcsConnectionStatus::Error, Some(err.to_string()));
             }
         }
 
@@ -723,13 +711,7 @@ fn update_state_from_line(state: &mut TlcsGameState, line: &str) {
 }
 
 fn emit_status(app: &AppHandle, status: TlcsConnectionStatus, message: Option<String>) {
-    let _ = app.emit_all(
-        "tlcs-connection",
-        TlcsConnectionEvent {
-            status,
-            message,
-        },
-    );
+    let _ = app.emit_all("tlcs-connection", TlcsConnectionEvent { status, message });
 }
 
 fn emit_game(app: &AppHandle, state: &TlcsGameState, raw: Option<String>) {
@@ -753,12 +735,35 @@ pub async fn connect_tlcs(
 ) -> Result<(), String> {
     state.tlcs.connect(options, app).await;
     Ok(())
-master
 }
 
 #[tauri::command]
 #[specta::specta]
- codex/implement-tlcs-stream-to-pgn-writer
+pub async fn disconnect_tlcs(state: tauri::State<'_, crate::AppState>) -> Result<(), String> {
+    state.tlcs.disconnect().await;
+    Ok(())
+}
+
+#[tauri::command]
+#[specta::specta]
+pub async fn send_tlcs_action(
+    action: TlcsUserAction,
+    state: tauri::State<'_, crate::AppState>,
+) -> Result<(), String> {
+    state.tlcs.send_action(action).await
+}
+
+#[tauri::command]
+#[specta::specta]
+pub async fn reconnect_tlcs(
+    state: tauri::State<'_, crate::AppState>,
+    app: tauri::AppHandle,
+) -> Result<(), String> {
+    state.tlcs.reconnect(app).await
+}
+
+#[tauri::command]
+#[specta::specta]
 pub async fn tlcs_status(state: tauri::State<'_, AppState>) -> Result<TlcsStatus, Error> {
     let guard = state.tlcs_handle.read().await;
     if let Some(handle) = guard.as_ref() {
@@ -775,25 +780,10 @@ pub async fn tlcs_status(state: tauri::State<'_, AppState>) -> Result<TlcsStatus
         pgn_path: None,
         moves_recorded: 0,
     })
-=======
-pub async fn disconnect_tlcs(state: tauri::State<'_, crate::AppState>) -> Result<(), String> {
-    state.tlcs.disconnect().await;
-    Ok(())
 }
 
 #[tauri::command]
 #[specta::specta]
-pub async fn send_tlcs_action(
-    action: TlcsUserAction,
-    state: tauri::State<'_, crate::AppState>,
-) -> Result<(), String> {
-    state.tlcs.send_action(action).await
-master
-}
-
-#[tauri::command]
-#[specta::specta]
- codex/implement-tlcs-stream-to-pgn-writer
 pub async fn tlcs_analysis_options(
     state: tauri::State<'_, AppState>,
 ) -> Result<Option<AnalysisOptions>, Error> {
@@ -804,12 +794,3 @@ pub async fn tlcs_analysis_options(
     }
     Ok(None)
 }
-=======
-pub async fn reconnect_tlcs(
-    state: tauri::State<'_, crate::AppState>,
-    app: tauri::AppHandle,
-) -> Result<(), String> {
-    state.tlcs.reconnect(app).await
-}
-
- master
