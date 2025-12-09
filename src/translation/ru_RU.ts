@@ -135,6 +135,7 @@ export const ru_RU = {
     "Home.Card.Puzzle.Title": "Головоломки",
     "Home.Card.Puzzle.Desc": "Тренируйте шахматные навыки",
     "Home.Card.Puzzle.Button": "Тренироваться",
+    "Home.Credits": "Credits: Jorge Ruiz Centelles and Codex OpenIA",
 
     "Board.Action.TogglePawnStructureView":
       "Переключить отображение структуры пешек",

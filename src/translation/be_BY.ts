@@ -135,6 +135,7 @@ export const be_BY = {
     "Home.Card.Puzzle.Title": "Галаваломкі",
     "Home.Card.Puzzle.Desc": "Трэніруйце шахматныя навыкі",
     "Home.Card.Puzzle.Button": "Трэніравацца",
+    "Home.Credits": "Credits: Jorge Ruiz Centelles and Codex OpenIA",
 
     "Board.Tabs.Practice": "Практыка",
     "Board.Tabs.Analysis": "Аналіз",

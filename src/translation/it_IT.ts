@@ -135,6 +135,7 @@ export const it_IT = {
     "Home.Card.Puzzle.Title": "Puzzle",
     "Home.Card.Puzzle.Desc": "Risolve puzzle di scacchi",
     "Home.Card.Puzzle.Button": "Gioca",
+    "Home.Credits": "Credits: Jorge Ruiz Centelles and Codex OpenIA",
 
     "Board.Tabs.Practice": "Pratica",
     "Board.Tabs.Analysis": "Analisi",

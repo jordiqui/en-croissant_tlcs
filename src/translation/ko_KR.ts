@@ -135,6 +135,7 @@ export const ko_KR = {
     "Home.Card.Puzzle.Title": "퍼즐",
     "Home.Card.Puzzle.Desc": "체스 실력을 훈련하세요",
     "Home.Card.Puzzle.Button": "훈련하기",
+    "Home.Credits": "Credits: Jorge Ruiz Centelles and Codex OpenIA",
 
     "Board.Action.TogglePawnStructureView": "폰 구조 보기 전환",
     "Board.Action.TakeSnapshot": "스냅샷 찍기",

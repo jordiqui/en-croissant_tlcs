@@ -76,32 +76,37 @@ export default function NewTabHome({ id }: { id: string }) {
   return (
     <>
       <ImportModal openModal={openModal} setOpenModal={setOpenModal} />
-      <SimpleGrid cols={{ base: 1, sm: 2, lg: 4 }}>
-        {cards.map((card) => (
-          <Card shadow="sm" p="lg" radius="md" withBorder key={card.title}>
-            <Stack align="center" h="100%" justify="space-between">
-              {card.icon}
+      <Stack gap="lg">
+        <SimpleGrid cols={{ base: 1, sm: 2, lg: 4 }}>
+          {cards.map((card) => (
+            <Card shadow="sm" p="lg" radius="md" withBorder key={card.title}>
+              <Stack align="center" h="100%" justify="space-between">
+                {card.icon}
 
-              <Box style={{ textAlign: "center" }}>
-                <Text fw={500}>{card.title}</Text>
-                <Text size="sm" c="dimmed">
-                  {card.description}
-                </Text>
-              </Box>
+                <Box style={{ textAlign: "center" }}>
+                  <Text fw={500}>{card.title}</Text>
+                  <Text size="sm" c="dimmed">
+                    {card.description}
+                  </Text>
+                </Box>
 
-              <Button
-                variant="light"
-                fullWidth
-                mt="md"
-                radius="md"
-                onClick={card.onClick}
-              >
-                {card.label}
-              </Button>
-            </Stack>
-          </Card>
-        ))}
-      </SimpleGrid>
+                <Button
+                  variant="light"
+                  fullWidth
+                  mt="md"
+                  radius="md"
+                  onClick={card.onClick}
+                >
+                  {card.label}
+                </Button>
+              </Stack>
+            </Card>
+          ))}
+        </SimpleGrid>
+        <Text c="dimmed" size="sm" ta="center">
+          {t("Home.Credits")}
+        </Text>
+      </Stack>
     </>
   );
 }

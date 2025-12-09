@@ -135,6 +135,7 @@ export const fr_FR = {
     "Home.Card.Puzzle.Title": "Puzzles",
     "Home.Card.Puzzle.Desc": "Entraînement pour vous améliorer",
     "Home.Card.Puzzle.Button": "S'entraîner",
+    "Home.Credits": "Credits: Jorge Ruiz Centelles and Codex OpenIA",
 
     "Board.Action.TogglePawnStructureView":
       "Basculer l'affichage de la structure de pions",

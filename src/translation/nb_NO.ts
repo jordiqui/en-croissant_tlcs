@@ -135,6 +135,7 @@ export const nb_NO = {
     "Home.Card.Puzzle.Title": "Sjakknøtter",
     "Home.Card.Puzzle.Desc": "Tren sjakkferdighetene dine",
     "Home.Card.Puzzle.Button": "Tren",
+    "Home.Credits": "Credits: Jorge Ruiz Centelles and Codex OpenIA",
 
     "Board.Tabs.Practice": "Trening",
     "Board.Tabs.Analysis": "Analyse",
