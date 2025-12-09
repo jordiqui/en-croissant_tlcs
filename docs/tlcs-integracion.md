@@ -27,7 +27,7 @@ GUI (React) ⇄ Comandos Tauri ⇄ Cliente TLCS (Rust) ⇄ Socket TCP (WireGuard
 ## Plan de integración
 
 1. **Configurar el servidor TLCS**
-   - Ajustar `servir.ini` con IP privada de WireGuard, puerto TLCS y rutas de libro/log.
+   - Ajustar `servir.ini` con IP privada de WireGuard, puerto TLCS y rutas de libro/log (ver ejemplo en `docs/tlcs-servir-config.md`).
    - Activar el log de depuración (`debug.log`) para inspeccionar formato de mensajes durante la implementación.
 
 2. **Establecer el túnel WireGuard**
