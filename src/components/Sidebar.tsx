@@ -1,11 +1,11 @@
 import { AppShellSection, Stack, Tooltip } from "@mantine/core";
 import {
   type Icon,
+  IconBroadcast,
   IconChess,
   IconCpu,
   IconDatabase,
   IconFiles,
-  IconBroadcast,
   IconSettings,
   IconUser,
 } from "@tabler/icons-react";
