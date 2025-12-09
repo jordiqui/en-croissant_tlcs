@@ -117,6 +117,7 @@ export const pt_PT = {
     "SideBar.User": "Utilizador",
     "SideBar.Files": "Ficheiros",
     "SideBar.Databases": "Bases de dados",
+    "SideBar.Live": "Live",
     "SideBar.Engines": "Engines",
     "SideBar.Settings": "Configurações",
 

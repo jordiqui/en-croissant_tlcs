@@ -117,6 +117,7 @@ export const ru_RU = {
     "SideBar.User": "Пользователь",
     "SideBar.Files": "Файлы",
     "SideBar.Databases": "Базы данных",
+    "SideBar.Live": "Live",
     "SideBar.Engines": "Движки",
     "SideBar.Settings": "Настройки",
 

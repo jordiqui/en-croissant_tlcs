@@ -117,6 +117,7 @@ export const zh_TW = {
     "SideBar.User": "使用者",
     "SideBar.Files": "檔案",
     "SideBar.Databases": "資料庫",
+    "SideBar.Live": "Live",
     "SideBar.Engines": "引擎",
     "SideBar.Settings": "設定",
 

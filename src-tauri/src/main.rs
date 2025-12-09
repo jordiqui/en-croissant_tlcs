@@ -6,6 +6,7 @@
 mod chess;
 mod db;
 mod error;
+mod tlcs;
 
 mod fs;
 mod lexer;
@@ -52,6 +53,7 @@ use crate::{
     },
     fs::{download_file, file_exists, get_file_metadata},
     opening::{get_opening_from_fen, get_opening_from_name, search_opening_name},
+    tlcs::{connect_tlcs, disconnect_tlcs, reconnect_tlcs, send_tlcs_action, SharedTlcs, TlcsManager},
 };
 use tokio::sync::{RwLock, Semaphore};
 
@@ -83,6 +85,8 @@ pub struct AppState {
 
     engine_processes: DashMap<(String, String), Arc<tokio::sync::Mutex<EngineProcess>>>,
     auth: AuthState,
+    #[derivative(Default(value = "Arc::new(TlcsManager::default())"))]
+    tlcs: SharedTlcs,
 }
 
 const REQUIRED_DIRS: &[(BaseDirectory, &str)] = &[
@@ -153,13 +157,19 @@ fn main() {
             get_games,
             search_position,
             get_players,
-            get_puzzle_db_info
+            get_puzzle_db_info,
+            connect_tlcs,
+            disconnect_tlcs,
+            send_tlcs_action,
+            reconnect_tlcs
         ))
         .events(tauri_specta::collect_events!(
             BestMovesPayload,
             DatabaseProgress,
             DownloadProgress,
-            ReportProgress
+            ReportProgress,
+            tlcs::TlcsConnectionEvent,
+            tlcs::TlcsGameEvent
         ));
 
     #[cfg(debug_assertions)]

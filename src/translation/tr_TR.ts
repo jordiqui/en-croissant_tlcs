@@ -117,6 +117,7 @@ export const tr_TR = {
     "SideBar.User": "Kullanıcı",
     "SideBar.Files": "Dosyalar",
     "SideBar.Databases": "Veritabanları",
+    "SideBar.Live": "Live",
     "SideBar.Engines": "Motorlar",
     "SideBar.Settings": "Ayarlar",
 
