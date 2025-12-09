@@ -303,11 +303,11 @@ pub async fn search_position(
                 }
             }
 
-                if let Some(black) = query.player2 {
-                    if black != *black_id {
-                        return;
-                    }
+            if let Some(black) = query.player2 {
+                if black != *black_id {
+                    return;
                 }
+            }
 
             // "any" | "whitewon" | "draw" | "blackwon"
             if let Some(result) = result {
@@ -315,24 +315,23 @@ pub async fn search_position(
                     match wanted_result.as_str() {
                         "whitewon" => {
                             if result != "1-0" {
-                                return
-                            } 
+                                return;
+                            }
                         }
                         "blackwon" => {
                             if result != "0-1" {
-                                return
-                            } 
+                                return;
+                            }
                         }
                         "draw" => {
                             if result != "1/2-1/2" {
-                                return
-                            } 
+                                return;
+                            }
                         }
                         &_ => {}
                     }
                 }
             }
-
 
             if let Some(position_query) = &query.position {
                 let position_query =

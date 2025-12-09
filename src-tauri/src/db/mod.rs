@@ -1314,14 +1314,13 @@ pub async fn get_players_game_info(
             acc
         })
         .reduce(DashMap::new, |acc1, acc2| {
-                for ((site, player), data) in acc2 {
-                    acc1.entry((site, player))
-                        .or_insert_with(Vec::new)
-                        .extend(data);
-                }
-                acc1
-            },
-        )
+            for ((site, player), data) in acc2 {
+                acc1.entry((site, player))
+                    .or_insert_with(Vec::new)
+                    .extend(data);
+            }
+            acc1
+        })
         .into_iter()
         .map(|((site, player), data)| SiteStatsData { site, player, data })
         .collect();

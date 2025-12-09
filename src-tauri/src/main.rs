@@ -13,6 +13,7 @@ mod oauth;
 mod opening;
 mod pgn;
 mod puzzle;
+mod tlcs;
 
 use std::path::PathBuf;
 use std::sync::{Arc, Mutex};
@@ -45,6 +46,9 @@ use crate::lexer::lex_pgn;
 use crate::oauth::authenticate;
 use crate::pgn::{count_pgn_games, delete_game, read_games, write_game};
 use crate::puzzle::{get_puzzle, get_puzzle_db_info};
+use crate::tlcs::{
+    start_tlcs_stream, stop_tlcs_stream, tlcs_analysis_options, tlcs_status, TlcsHandle,
+};
 use crate::{
     chess::get_best_moves,
     db::{
@@ -83,6 +87,8 @@ pub struct AppState {
 
     engine_processes: DashMap<(String, String), Arc<tokio::sync::Mutex<EngineProcess>>>,
     auth: AuthState,
+    #[derivative(Default(value = "Arc::new(RwLock::new(None))"))]
+    tlcs_handle: Arc<RwLock<Option<TlcsHandle>>>,
 }
 
 const REQUIRED_DIRS: &[(BaseDirectory, &str)] = &[
@@ -153,7 +159,11 @@ fn main() {
             get_games,
             search_position,
             get_players,
-            get_puzzle_db_info
+            get_puzzle_db_info,
+            start_tlcs_stream,
+            stop_tlcs_stream,
+            tlcs_status,
+            tlcs_analysis_options
         ))
         .events(tauri_specta::collect_events!(
             BestMovesPayload,
