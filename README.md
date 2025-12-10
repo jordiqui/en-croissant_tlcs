@@ -53,6 +53,8 @@ The built app can be found at `src-tauri/target/release`
 Consulta [docs/tlcs-integracion.md](docs/tlcs-integracion.md) para un resumen en español sobre cómo enlazar un servidor `tlc_server16a.exe` mediante WireGuard y exponerlo en la GUI con un cliente TLCS nativo.
 Incluye detalles sobre la persistencia del PGN del stream y el log rotativo `tlcs.log` generado en `AppData/tlcs/`.
 
+Para retransmitir ese stream a YouTube (túnel TLCS + captura de la app) y ver los comandos de compilación en MinGW64, revisa [docs/youtube-tunel.md](docs/youtube-tunel.md).
+
 ## Donate
 
 If you wish to support the development of this GUI, you can do so [here](https://encroissant.org/support). All donations are greatly appreciated!
